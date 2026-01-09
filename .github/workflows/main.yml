@@ -1,0 +1,33 @@
+name: Actualizacion Diaria Bitcoin
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Se ejecuta a las 12:00 PM UTC (aprox 6:00 AM CDMX)
+  workflow_dispatch:      # Permite ejecutarlo manualmente con un botón
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar librerias
+        run: |
+          pip install pandas requests openpyxl pytz jinja2
+
+      - name: Ejecutar script de Bitcoin
+        run: python actualizar_precios.py
+
+      - name: Guardar cambios en GitHub
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add BITCOIN_REPORTE_DIARIO.xlsx
+          git commit -m "Actualización automática: $(date)" || echo "No hay cambios para confirmar"
+          git push
