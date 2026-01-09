@@ -2,8 +2,8 @@ name: Actualizacion Diaria Bitcoin
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # Se ejecuta a las 12:00 PM UTC (aprox 6:00 AM CDMX)
-  workflow_dispatch:      # Permite ejecutarlo manualmente con un botón
+    - cron: '0 12 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,8 +26,8 @@ jobs:
 
       - name: Guardar cambios en GitHub
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add BITCOIN_REPORTE_DIARIO.xlsx
-          git commit -m "Actualización automática: $(date)" || echo "No hay cambios para confirmar"
+          git commit -m "Actualización automática: $(date)" || echo "No hay cambios"
           git push
